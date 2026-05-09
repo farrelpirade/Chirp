@@ -19,11 +19,11 @@ Chirp is a text-based microblogging platform inspired by Twitter (X). This proje
 - **Software:** Any operating system with a modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, or Safari).
 - **Network:** Active internet connection to reach the application server.
 
-## [cite_start]Team Members [cite: 146]
+## Team Members [cite: 146]
 
-| Name                                        | Student ID (NIM)                     | Feature (PIC)                              |
-| :------------------------------------------ | :----------------------------------- | :----------------------------------------- |
-| [cite_start]Evo Abimanyu [cite: 147]        | [cite_start]103012400161 [cite: 147] | [cite_start]Account Management [cite: 147] |
-| [cite_start]Farrel Malik Pirade [cite: 147] | [cite_start]103012400068 [cite: 147] | [cite_start]News & Timeline [cite: 147]    |
-| [cite_start]Faza Fawzan Azima [cite: 147]   | [cite_start]103012400248 [cite: 147] | [cite_start]Direct Message [cite: 147]     |
-| [cite_start]Ravi Adi Prakoso [cite: 147]    | [cite_start]103012430058 [cite: 147] | [cite_start]Chatbot [cite: 147]            |
+| Name                | Student ID (NIM) | Feature (PIC)      |
+| :------------------ | :--------------- | :----------------- |
+| Evo Abimanyu        | 103012400161     | Account Management |
+| Farrel Malik Pirade | 103012400068     | News & Timeline    |
+| Faza Fawzan Azima   | 103012400248     | Direct Message     |
+| Ravi Adi Prakoso    | 103012430058     | Chatbot            |
