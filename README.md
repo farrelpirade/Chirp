@@ -27,3 +27,5 @@ Chirp is a text-based microblogging platform inspired by Twitter (X). This proje
 | Farrel Malik Pirade | 103012400068     | News & Timeline    |
 | Faza Fawzan Azima   | 103012400248     | Direct Message     |
 | Ravi Adi Prakoso    | 103012430058     | Chatbot            |
+
+## Tech Stack
