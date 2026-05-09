@@ -19,7 +19,7 @@ Chirp is a text-based microblogging platform inspired by Twitter (X). This proje
 - **Software:** Any operating system with a modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, or Safari).
 - **Network:** Active internet connection to reach the application server.
 
-## Team Members [cite: 146]
+## Team Members
 
 | Name                | Student ID (NIM) | Feature (PIC)      |
 | :------------------ | :--------------- | :----------------- |
