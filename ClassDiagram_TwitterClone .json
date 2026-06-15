@@ -1,0 +1,724 @@
+{
+  "version": "30.2.2",
+  "pages": [
+    {
+      "id": "cpf6wOM93cpWLcFWuG38",
+      "name": "Page-1",
+      "cells": [
+        {
+          "id": "1",
+          "type": "layer"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-1",
+          "type": "node",
+          "parent": "1",
+          "label": "AkunUser"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-2",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ username: String&nbsp;"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-4",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ fullName: String&nbsp;"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-23",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "- NomorTelpon: String&nbsp;"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-22",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "- email: String&nbsp;"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-21",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "- password: String&nbsp;"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-3",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-32",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ AkunUser(String: username, String: password, String: email,&nbsp;String: NomorTelpon, String: fullName)"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-4",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ login(String: username, String: password)"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-29",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ logout()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-30",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ changeUsername()"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-6",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ changeFullName()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-31",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-1",
+          "label": "+ changePassword()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-34",
+          "type": "node",
+          "parent": "1",
+          "label": "Timeline"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-36",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34",
+          "label": "- posts: Thread[]"
+        },
+        {
+          "id": "6HGh7-AFUQn0ebgKKL-Q-1",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34",
+          "label": "- news: News[]"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-39",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-43",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34",
+          "label": "+ showThread()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-44",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34",
+          "label": "+ showNews()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-51",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34",
+          "label": "+ filterThreadTrending()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-54",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34",
+          "label": "+ filterForYouPageThread()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-53",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-34",
+          "label": "+ filterFollowedThread()"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-1",
+          "type": "node",
+          "parent": "1",
+          "label": "News"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-2",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "- judul: String&nbsp;"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-6",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-8",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "+ getJudul(): String"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-14",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "+ getKonten(): String"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-15",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "+ getDeskripsi(): String"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-19",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "+ setJudul(judul : String)&nbsp;"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-21",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "+ setKonten(konten : String)"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-198",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "# getTanggal(): Date"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-184",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "# Posting()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-106",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-1",
+          "label": "+ typing() : String"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-61",
+          "type": "edge",
+          "parent": "1",
+          "source": "yFxL7HXzV5dhdYd3lO75-34",
+          "target": "yFxL7HXzV5dhdYd3lO75-32"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-22",
+          "type": "node",
+          "parent": "1",
+          "label": "Thread"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-23",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "- like: int&nbsp;"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-39",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "- reply: Reply[]&nbsp;"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-1",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "- repost: Int"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-38",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "- bookmark: int"
+        },
+        {
+          "id": "kWg-oYFaakAcVvxqFTvn-1",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "- user: AkunUser",
+          "html": "- user: AkunUser<span style=\"background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));\">&nbsp;</span>"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-27",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-105",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ setLike(like : int)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-57",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ setUser(akun : AkunUser)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-77",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ setBookmark(bookmark : int)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-85",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ setReply(reply : Reply)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-86",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ getLike(): int"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-26",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ setKonten(konten: String)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-87",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ getUser(): AkunUser"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-88",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ getBookmark(): int"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-89",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ getReply(): Reply[]"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-2",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ getRepost(): Int"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-199",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "# getTanggal(): Date"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-183",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "# Posting()"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-3",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "# Repost()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-170",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-22",
+          "label": "+ typing() : String"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-116",
+          "type": "node",
+          "parent": "1",
+          "label": "DirectMessage"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-117",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116",
+          "label": "-messages :&nbsp;Message[]&nbsp;"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-119",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-120",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116",
+          "label": "+ showMessage()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-136",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116",
+          "label": "+ sortMessage()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-137",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116",
+          "label": "+ pinMessage()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-138",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116",
+          "label": "+ delateMessage()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-139",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116",
+          "label": "+ addMessage()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-122",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-116",
+          "label": "+ notification()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-126",
+          "type": "node",
+          "parent": "1",
+          "label": "Message"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-161",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-126",
+          "label": "- username: String"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-141",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-126",
+          "label": "- tanggalKirim : Date[]"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-140",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-126",
+          "label": "- teks : String[]"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-129",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-126"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-130",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-126",
+          "label": "+ kirimMessage()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-142",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-126",
+          "label": "+ hapusMessage()"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-167",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-126",
+          "label": "+ typing() : String"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-90",
+          "type": "node",
+          "parent": "1",
+          "label": "Reply"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-91",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "- like: int&nbsp;"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-92",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "- reply: Reply[]&nbsp;"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-93",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "- bookmark: int"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-19",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "- replyTo: AkunUser"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-94",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "- user: AkunUser",
+          "html": "- user: AkunUser<span style=\"background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));\">&nbsp;</span>"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-95",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-96",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ setLike(like : int)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-97",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ setUser(akun : AkunUser)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-98",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ setBookmark(bookmark : int)"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-100",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ getLike(): int"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-18",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ getReply(): Reply"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-101",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ getUser(): AkunUser"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-20",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ getReplyTo(): AkunUser"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-21",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ postReply()"
+        },
+        {
+          "id": "b1NujD1SHJEuhVtZ0zqr-102",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ getBookmark(): int"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-181",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ setKonten(konten : String)"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-171",
+          "type": "node",
+          "parent": "b1NujD1SHJEuhVtZ0zqr-90",
+          "label": "+ typing() : String"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-144",
+          "type": "edge",
+          "parent": "1",
+          "source": "yFxL7HXzV5dhdYd3lO75-122",
+          "target": "yFxL7HXzV5dhdYd3lO75-126"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-145",
+          "type": "edge",
+          "parent": "1"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-146",
+          "type": "node",
+          "parent": "1",
+          "label": "chatBot"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-147",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-146",
+          "label": "- listPesan: ChatbotMessage[]"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-162",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-146",
+          "label": "- input : String[]&nbsp;"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-148",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-146"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-154",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-146",
+          "label": "+ send(Input: String): String"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-168",
+          "type": "node",
+          "parent": "yFxL7HXzV5dhdYd3lO75-146",
+          "label": "+ typing() : String"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-186",
+          "type": "edge",
+          "parent": "1",
+          "source": "yFxL7HXzV5dhdYd3lO75-146",
+          "target": "6S0IxXyZTyfOqAqfo3iZ-4"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-200",
+          "type": "node",
+          "parent": "1",
+          "label": "<<Interface>>\nketik\n\n+ typing() : String",
+          "html": "<p style=\"margin:0px;margin-top:4px;text-align:center;\"><i>&lt;&lt;Interface&gt;&gt;</i></p><p style=\"margin:0px;margin-top:4px;text-align:center;\"><i><b>ketik</b></i></p><hr size=\"1\" style=\"border-style:solid;\"><br><hr size=\"1\" style=\"border-style:solid;\"><p style=\"margin:0px;margin-left:4px;\">+ typing() : String</p>"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-203",
+          "type": "edge",
+          "parent": "1",
+          "source": "yFxL7HXzV5dhdYd3lO75-183",
+          "target": "yFxL7HXzV5dhdYd3lO75-200"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-206",
+          "type": "edge",
+          "parent": "1",
+          "source": "b1NujD1SHJEuhVtZ0zqr-96",
+          "target": "yFxL7HXzV5dhdYd3lO75-200"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-207",
+          "type": "edge",
+          "parent": "1",
+          "source": "yFxL7HXzV5dhdYd3lO75-106",
+          "target": "yFxL7HXzV5dhdYd3lO75-200"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-208",
+          "type": "edge",
+          "parent": "1",
+          "source": "yFxL7HXzV5dhdYd3lO75-167",
+          "target": "yFxL7HXzV5dhdYd3lO75-200"
+        },
+        {
+          "id": "yFxL7HXzV5dhdYd3lO75-209",
+          "type": "edge",
+          "parent": "1",
+          "source": "yFxL7HXzV5dhdYd3lO75-168",
+          "target": "yFxL7HXzV5dhdYd3lO75-200"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-7",
+          "type": "node",
+          "parent": "1",
+          "label": "ChatbotMesage"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-8",
+          "type": "node",
+          "parent": "6S0IxXyZTyfOqAqfo3iZ-7",
+          "label": "- role: String"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-9",
+          "type": "node",
+          "parent": "6S0IxXyZTyfOqAqfo3iZ-7",
+          "label": "- kontent: String"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-11",
+          "type": "node",
+          "parent": "6S0IxXyZTyfOqAqfo3iZ-7"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-13",
+          "type": "node",
+          "parent": "6S0IxXyZTyfOqAqfo3iZ-7",
+          "label": "+ getMessage(): string"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-15",
+          "type": "node",
+          "parent": "6S0IxXyZTyfOqAqfo3iZ-7",
+          "label": "+ getRole(): string"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-14",
+          "type": "node",
+          "parent": "6S0IxXyZTyfOqAqfo3iZ-7",
+          "label": "+ setRole(): string",
+          "html": "+ setRole(): string<div><br></div>"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-16",
+          "type": "node",
+          "parent": "6S0IxXyZTyfOqAqfo3iZ-7",
+          "label": "+ setMessage(): string",
+          "html": "+ setMessage(): string<div><br></div>"
+        },
+        {
+          "id": "6S0IxXyZTyfOqAqfo3iZ-17",
+          "type": "edge",
+          "parent": "1",
+          "source": "6S0IxXyZTyfOqAqfo3iZ-13",
+          "target": "yFxL7HXzV5dhdYd3lO75-162"
+        },
+        {
+          "id": "DcYoMHC9Xa_oZoOZVjcv-2",
+          "type": "edge",
+          "parent": "1",
+          "source": "b1NujD1SHJEuhVtZ0zqr-90",
+          "target": "yFxL7HXzV5dhdYd3lO75-170"
+        },
+        {
+          "id": "-yDC9ZvlHmyjEpTcJ2vA-1",
+          "type": "edge",
+          "parent": "1",
+          "source": "b1NujD1SHJEuhVtZ0zqr-22",
+          "target": "yFxL7HXzV5dhdYd3lO75-53"
+        },
+        {
+          "id": "DcyncHxIhr5qZWc2-5PG-1",
+          "type": "edge",
+          "parent": "1",
+          "source": "b1NujD1SHJEuhVtZ0zqr-1",
+          "target": "yFxL7HXzV5dhdYd3lO75-53"
+        }
+      ]
+    }
+  ]
+}
