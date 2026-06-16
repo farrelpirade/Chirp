@@ -35,7 +35,8 @@ public class ChatbotService {
         List<ChatbotMessage> history = chatbotMessageRepository.findByUsernameOrderByIdAsc(username);
 
         // 3. Define Chatbot behavior via System Instruction
-        String systemPrompt = "You are Chirpy, a helpful and friendly AI assistant inside the Chirp microblogging platform. Keep your replies concise, witty, and under 150 words. Adopt a casual social media style.";
+        String systemPrompt = "You are Chirpy, a helpful and friendly AI assistant inside the Chirp microblogging platform. Keep your replies concise, witty, and under 150 words. Adopt a casual social media style. " +
+                "You have access to a tool called 'fetch_latest_news' to fetch the latest news articles on Chirp. If the user asks for news, updates, or what is currently happening on the platform, call this tool and then summarize the news for them.";
 
         // 4. Generate Completion from OpenRouter
         String aiResponse = openRouterService.generateCompletion(history, systemPrompt);

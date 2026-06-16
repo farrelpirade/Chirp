@@ -90,11 +90,21 @@ if exist "!JAVA_HOME!\bin\java.exe" (
     endlocal & set "JAVA_HOME=%JAVA_HOME%"
     exit /b 0
 )
-for /f "tokens=2* delims==" %%B in ('cmd /c ""%JAVA_EXE%" -XshowSettings:properties -version 2^>^1 ^| findstr /i "java.home""') do (
-    set "JAVA_HOME=%%C"
+set "JH_RAW="
+for /f "tokens=1* delims==" %%B in ('cmd /c ""%JAVA_EXE%" -XshowSettings:properties -version 2^>^1 ^| findstr /i "java.home""') do (
+    set "JH_RAW=%%C"
 )
-for %%B in ("!JAVA_HOME!") do set "JAVA_HOME=%%~B"
-if defined JAVA_HOME if exist "!JAVA_HOME!\bin\java.exe" (
+if not defined JH_RAW (
+    endlocal
+    exit /b 1
+)
+:trim_jh
+if "%JH_RAW:~0,1%"==" " (
+    set "JH_RAW=%JH_RAW:~1%"
+    goto trim_jh
+)
+for %%B in ("%JH_RAW%") do set "JAVA_HOME=%%~B"
+if exist "%JAVA_HOME%\bin\java.exe" (
     endlocal & set "JAVA_HOME=%JAVA_HOME%"
     exit /b 0
 )
