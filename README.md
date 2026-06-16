@@ -41,8 +41,8 @@ git clone [https://github.com/farrelpirade/Chirp.git](https://github.com/farrelp
 cd Chirp
 ```
 
-2. **Run the App:**
-   Just double-click the run_project.bat file.
+**2. Run the App:**
+Just double-click the run_project.bat file.
 
-3. **Open in Browser:**
-   Go to http://localhost:3000
+**3. Open in Browser:**
+Go to http://localhost:3000
