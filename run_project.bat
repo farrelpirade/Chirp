@@ -4,11 +4,11 @@ echo ==========================================
 echo       [ CHIRP PROJECT LAUNCHER ]
 echo ==========================================
 echo.
+setlocal
 
-:: Set Java Home path for Java 25
-set "JAVA_HOME=C:\Program Files\Java\jdk-25"
+call :ResolveJavaHome
+if errorlevel 1 goto NoJava
 
-:: 1. Launch Spring Boot Backend
 echo [1/2] Launching Java Spring Boot Backend...
 start "Chirp Backend (Port 8080)" cmd /k "echo Starting Spring Boot backend... && cd backend && mvnw.cmd spring-boot:run"
 
@@ -31,3 +31,93 @@ echo  - Frontend log window is running.
 echo ==========================================
 echo.
 pause
+exit /b 0
+
+:ResolveJavaHome
+if defined JAVA_HOME (
+    if exist "%JAVA_HOME%\bin\java.exe" (
+        echo Using existing JAVA_HOME=%JAVA_HOME%
+        exit /b 0
+    )
+    echo WARNING: JAVA_HOME is set but does not point to a valid Java installation: %JAVA_HOME%
+)
+
+for /f "usebackq delims=" %%A in (`where java 2^>nul`) do (
+    call :DeriveJavaHomeFromExe "%%~fA"
+    if not errorlevel 1 goto JavaFound
+)
+for /f "usebackq delims=" %%A in (`where javac 2^>nul`) do (
+    call :DeriveJavaHomeFromExe "%%~fA"
+    if not errorlevel 1 goto JavaFound
+)
+echo WARNING: Java executable not found on PATH.
+echo Attempting automatic Java install if winget is available...
+call :InstallJava
+if errorlevel 1 exit /b 1
+
+rem Try detection again after install
+for /f "usebackq delims=" %%A in (`where java 2^>nul`) do (
+    call :DeriveJavaHomeFromExe "%%~fA"
+    if not errorlevel 1 goto JavaFound
+)
+for /f "usebackq delims=" %%A in (`where javac 2^>nul`) do (
+    call :DeriveJavaHomeFromExe "%%~fA"
+    if not errorlevel 1 goto JavaFound
+)
+echo ERROR: Java executable still not found after automatic install.
+exit /b 1
+
+:JavaFound
+if exist "%JAVA_HOME%\bin\java.exe" (
+    echo Resolved JAVA_HOME=%JAVA_HOME%
+    exit /b 0
+)
+echo ERROR: Failed to derive JAVA_HOME from %JAVA_EXE%.
+exit /b 1
+
+:DeriveJavaHomeFromExe
+setlocal enabledelayedexpansion
+set "JAVA_EXE=%~1"
+for %%B in ("%JAVA_EXE%") do set "JAVA_BIN=%%~dpB"
+for %%B in ("%JAVA_BIN%..") do set "JAVA_HOME=%%~fB"
+if exist "!JAVA_HOME!\bin\java.exe" (
+    endlocal & set "JAVA_HOME=%JAVA_HOME%"
+    exit /b 0
+)
+for /f "tokens=2* delims==" %%B in ('"%JAVA_EXE%" -XshowSettings:properties -version 2^>^1 ^| findstr /i "java.home"') do (
+    set "JAVA_HOME=%%C"
+)
+for %%B in ("!JAVA_HOME!") do set "JAVA_HOME=%%~B"
+if defined JAVA_HOME if exist "!JAVA_HOME!\bin\java.exe" (
+    endlocal & set "JAVA_HOME=%JAVA_HOME%"
+    exit /b 0
+)
+endlocal
+exit /b 1
+
+:InstallJava
+where winget >nul 2>&1
+if errorlevel 1 (
+    echo WARNING: winget is not installed. Cannot auto-install Java from this script.
+    exit /b 1
+)
+
+echo winget found. Installing Java 21 via winget...
+ powershell -NoProfile -Command "& {try { winget install --id EclipseAdoptium.Temurin.21.JDK -e --accept-package-agreements --accept-source-agreements } catch { exit 1 }}"
+if errorlevel 1 (
+    echo First install attempt failed. Trying Microsoft.OpenJDK.21...
+     powershell -NoProfile -Command "& {try { winget install --id Microsoft.OpenJDK.21 -e --accept-package-agreements --accept-source-agreements } catch { exit 1 }}"
+)
+if errorlevel 1 (
+    echo ERROR: Automatic Java install failed. Please install a JDK manually.
+    exit /b 1
+)
+echo Java installation completed. Please wait while the script re-checks Java.
+exit /b 0
+
+:NoJava
+echo.
+echo ERROR: Cannot start the backend without a valid Java installation.
+echo Please install a Java JDK and ensure it is available in PATH or set JAVA_HOME correctly.
+pause
+exit /b 1
