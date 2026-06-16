@@ -84,7 +84,7 @@ if exist "!JAVA_HOME!\bin\java.exe" (
     endlocal & set "JAVA_HOME=%JAVA_HOME%"
     exit /b 0
 )
-for /f "tokens=2* delims==" %%B in ('"%JAVA_EXE%" -XshowSettings:properties -version 2^>^1 ^| findstr /i "java.home"') do (
+for /f "tokens=2* delims==" %%B in ('cmd /c ""%JAVA_EXE%" -XshowSettings:properties -version 2^>^1 ^| findstr /i "java.home""') do (
     set "JAVA_HOME=%%C"
 )
 for %%B in ("!JAVA_HOME!") do set "JAVA_HOME=%%~B"

@@ -25,6 +25,9 @@ const newPostContent = ref('')
 const activeFilter = ref('foryou') // 'foryou' | 'trending'
 const searchKeyword = ref('')
 
+// Bookmark State
+const bookmarks = ref([])
+
 // News State
 const newsList = ref([])
 
@@ -74,6 +77,17 @@ watch(searchKeyword, () => {
 watch(activeFilter, () => {
   loadTimeline()
 })
+
+const loadBookmarks = async () => {
+  if (!user.value) return
+  try {
+    bookmarks.value = await $fetch(`${BACKEND_URL}/threads/bookmarks`, {
+      query: { username: user.value.username }
+    })
+  } catch (err) {
+    console.error('Failed to load bookmarks:', err)
+  }
+}
 
 // Authentication API calls
 const handleLogin = async () => {
@@ -186,8 +200,15 @@ const handleRepost = async (id) => {
 
 const handleBookmark = async (id) => {
   try {
-    await $fetch(`${BACKEND_URL}/threads/${id}/bookmark`, { method: 'POST' })
-    loadTimeline()
+    await $fetch(`${BACKEND_URL}/threads/${id}/bookmark`, {
+      method: 'POST',
+      body: { username: user.value.username }
+    })
+    if (currentTab.value === 'bookmarks') {
+      loadBookmarks()
+    } else {
+      loadTimeline()
+    }
   } catch (err) {
     console.error('Failed to bookmark thread:', err)
   }

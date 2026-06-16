@@ -5,6 +5,7 @@ import com.chirp.backend.model.News;
 import com.chirp.backend.model.Reply;
 import com.chirp.backend.model.Thread;
 import com.chirp.backend.repository.AkunUserRepository;
+import com.chirp.backend.repository.BookmarkRepository;
 import com.chirp.backend.repository.NewsRepository;
 import com.chirp.backend.repository.ReplyRepository;
 import com.chirp.backend.repository.ThreadRepository;
@@ -22,6 +23,7 @@ public class TimelineService {
     private final NewsRepository newsRepository;
     private final AkunUserRepository userRepository;
     private final ReplyRepository replyRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final OpenRouterService openRouterService;
 
     @Autowired
@@ -29,11 +31,13 @@ public class TimelineService {
                            NewsRepository newsRepository,
                            AkunUserRepository userRepository,
                            ReplyRepository replyRepository,
+                           BookmarkRepository bookmarkRepository,
                            OpenRouterService openRouterService) {
         this.threadRepository = threadRepository;
         this.newsRepository = newsRepository;
         this.userRepository = userRepository;
         this.replyRepository = replyRepository;
+        this.bookmarkRepository = bookmarkRepository;
         this.openRouterService = openRouterService;
     }
 
@@ -71,6 +75,35 @@ public class TimelineService {
 
         thread.setBookmark(thread.getBookmark() + 1);
         return threadRepository.save(thread);
+    }
+
+    public Thread toggleBookmark(Long threadId, String username) {
+        Thread thread = threadRepository.findById(threadId)
+                .orElseThrow(() -> new IllegalArgumentException("Thread not found"));
+
+        AkunUser user = userRepository.findById(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (bookmarkRepository.findByUserAndThread(user, thread).isPresent()) {
+            bookmarkRepository.deleteByUserAndThread(user, thread);
+            thread.setBookmark(Math.max(0, thread.getBookmark() - 1));
+        } else {
+            Bookmark bookmark = new Bookmark();
+            bookmark.setUser(user);
+            bookmark.setThread(thread);
+            bookmarkRepository.save(bookmark);
+            thread.setBookmark(thread.getBookmark() + 1);
+        }
+        return threadRepository.save(thread);
+    }
+
+    public List<Thread> getBookmarkedThreads(String username) {
+        AkunUser user = userRepository.findById(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return bookmarkRepository.findAllByUserOrderByThread_TanggalDesc(user).stream()
+                .map(Bookmark::getThread)
+                .collect(Collectors.toList());
     }
 
     public Reply postReply(Long threadId, String username, String konten, String replyToUsername) {

@@ -61,10 +61,23 @@ public class TimelineController {
     }
 
     @PostMapping("/threads/{id}/bookmark")
-    public ResponseEntity<?> bookmark(@PathVariable Long id) {
+    public ResponseEntity<?> bookmark(@PathVariable Long id, @RequestBody Map<String, String> body) {
         try {
-            Thread thread = timelineService.bookmark(id);
+            String username = body.get("username");
+            if (username == null) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Username is required to bookmark a thread"));
+            }
+            Thread thread = timelineService.toggleBookmark(id, username);
             return ResponseEntity.ok(thread);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/threads/bookmarks")
+    public ResponseEntity<?> getBookmarkedThreads(@RequestParam String username) {
+        try {
+            return ResponseEntity.ok(timelineService.getBookmarkedThreads(username));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
