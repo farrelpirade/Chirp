@@ -28,4 +28,21 @@ Chirp is a text-based microblogging platform inspired by Twitter (X). This proje
 | Faza Fawzan Azima   | 103012400248     | Direct Message     |
 | Ravi Adi Prakoso    | 103012430058     | Chatbot            |
 
-## Tech Stack
+## How to Run
+
+> **Heads up!** > The automated `run_project.bat` script is strictly for **Windows** users since it relies on the built-in Command Prompt (`cmd.exe`).
+
+Follow these simple steps to get Chirp up and running on your local machine:
+
+**1. Clone the Repo**
+
+```bash
+git clone [https://github.com/farrelpirade/Chirp.git](https://github.com/farrelpirade/Chirp.git)
+cd Chirp
+```
+
+2. **Run the App:**
+   Just double-click the run_project.bat file.
+
+3. **Open in Browser:**
+   Go to http://localhost:3000
