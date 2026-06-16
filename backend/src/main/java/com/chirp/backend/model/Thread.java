@@ -82,6 +82,10 @@ public class Thread implements Ketik {
         return this.reply.toArray(new Reply[0]);
     }
 
+    public List<Reply> getReplyList() {
+        return this.reply;
+    }
+
     public int getRepost() {
         return this.repost;
     }

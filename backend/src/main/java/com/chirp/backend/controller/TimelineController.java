@@ -83,6 +83,30 @@ public class TimelineController {
         }
     }
 
+    @DeleteMapping("/threads/{id}")
+    public ResponseEntity<?> deleteThread(@PathVariable Long id, @RequestParam String username) {
+        System.out.println("[BACKEND] deleteThread called for id=" + id + " username=" + username);
+        try {
+            timelineService.deleteThread(id, username);
+            return ResponseEntity.ok(Map.of("message", "Thread deleted successfully"));
+        } catch (Exception e) {
+            System.err.println("[BACKEND] deleteThread error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/replies/{id}")
+    public ResponseEntity<?> deleteReply(@PathVariable Long id, @RequestParam String username) {
+        System.out.println("[BACKEND] deleteReply called for id=" + id + " username=" + username);
+        try {
+            timelineService.deleteReply(id, username);
+            return ResponseEntity.ok(Map.of("message", "Reply deleted successfully"));
+        } catch (Exception e) {
+            System.err.println("[BACKEND] deleteReply error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/threads/{id}/reply")
     public ResponseEntity<?> reply(@PathVariable Long id, @RequestBody Map<String, String> body) {
         try {

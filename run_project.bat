@@ -50,20 +50,26 @@ for /f "usebackq delims=" %%A in (`where javac 2^>nul`) do (
     call :DeriveJavaHomeFromExe "%%~fA"
     if not errorlevel 1 goto JavaFound
 )
+call :ScanCommonPaths
+if not errorlevel 1 goto JavaFound
+
 echo WARNING: Java executable not found on PATH.
 echo Attempting automatic Java install if winget is available...
 call :InstallJava
 if errorlevel 1 exit /b 1
 
 rem Try detection again after install
-for /f "usebackq delims=" %%A in (`where java 2^>nul`) do (
-    call :DeriveJavaHomeFromExe "%%~fA"
+for /f "usebackq delims=" %%A2 in (`where java 2^>nul`) do (
+    call :DeriveJavaHomeFromExe "%%~fA2"
     if not errorlevel 1 goto JavaFound
 )
-for /f "usebackq delims=" %%A in (`where javac 2^>nul`) do (
-    call :DeriveJavaHomeFromExe "%%~fA"
+for /f "usebackq delims=" %%A2 in (`where javac 2^>nul`) do (
+    call :DeriveJavaHomeFromExe "%%~fA2"
     if not errorlevel 1 goto JavaFound
 )
+call :ScanCommonPaths
+if not errorlevel 1 goto JavaFound
+
 echo ERROR: Java executable still not found after automatic install.
 exit /b 1
 
@@ -93,6 +99,33 @@ if defined JAVA_HOME if exist "!JAVA_HOME!\bin\java.exe" (
     exit /b 0
 )
 endlocal
+exit /b 1
+
+:ScanCommonPaths
+for /d %%D in ("C:\Program Files\Eclipse Adoptium\jdk-*") do (
+    if exist "%%D\bin\java.exe" (
+        set "JAVA_HOME=%%D"
+        exit /b 0
+    )
+)
+for /d %%D in ("C:\Program Files\Java\jdk-*") do (
+    if exist "%%D\bin\java.exe" (
+        set "JAVA_HOME=%%D"
+        exit /b 0
+    )
+)
+for /d %%D in ("C:\Program Files\Microsoft\jdk-*") do (
+    if exist "%%D\bin\java.exe" (
+        set "JAVA_HOME=%%D"
+        exit /b 0
+    )
+)
+for /d %%D in ("C:\Program Files (x86)\Java\jdk-*") do (
+    if exist "%%D\bin\java.exe" (
+        set "JAVA_HOME=%%D"
+        exit /b 0
+    )
+)
 exit /b 1
 
 :InstallJava

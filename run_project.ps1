@@ -77,6 +77,27 @@ function Install-JavaWithWinget {
     return $false
 }
 
+function Get-JavaHomeFromCommonPaths {
+    $commonDirs = @(
+        "C:\Program Files\Eclipse Adoptium",
+        "C:\Program Files\Java",
+        "C:\Program Files\Microsoft",
+        "C:\Program Files (x86)\Java"
+    )
+    foreach ($dir in $commonDirs) {
+        if (Test-Path $dir) {
+            $subdirs = Get-ChildItem $dir -Directory | Where-Object { $_.Name -match '^(jdk|jre|openjdk)' }
+            foreach ($subdir in $subdirs) {
+                $candidate = $subdir.FullName
+                if (Test-Path (Join-Path $candidate 'bin\java.exe')) {
+                    return $candidate
+                }
+            }
+        }
+    }
+    return $null
+}
+
 function Resolve-JavaHome {
     if ($env:JAVA_HOME -and (Test-Path (Join-Path $env:JAVA_HOME 'bin\java.exe'))) {
         return $env:JAVA_HOME
@@ -91,6 +112,11 @@ function Resolve-JavaHome {
     }
 
     $candidate = Get-JavaHomeFromRegistry
+    if ($candidate) {
+        return $candidate
+    }
+
+    $candidate = Get-JavaHomeFromCommonPaths
     if ($candidate) {
         return $candidate
     }

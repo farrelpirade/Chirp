@@ -1,6 +1,7 @@
 package com.chirp.backend.service;
 
 import com.chirp.backend.model.AkunUser;
+import com.chirp.backend.model.Bookmark;
 import com.chirp.backend.model.News;
 import com.chirp.backend.model.Reply;
 import com.chirp.backend.model.Thread;
@@ -11,6 +12,7 @@ import com.chirp.backend.repository.ReplyRepository;
 import com.chirp.backend.repository.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -77,6 +79,7 @@ public class TimelineService {
         return threadRepository.save(thread);
     }
 
+    @Transactional
     public Thread toggleBookmark(Long threadId, String username) {
         Thread thread = threadRepository.findById(threadId)
                 .orElseThrow(() -> new IllegalArgumentException("Thread not found"));
@@ -104,6 +107,48 @@ public class TimelineService {
         return bookmarkRepository.findAllByUserOrderByThread_TanggalDesc(user).stream()
                 .map(Bookmark::getThread)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteThread(Long threadId, String username) {
+        Thread thread = threadRepository.findById(threadId)
+                .orElseThrow(() -> new IllegalArgumentException("Thread not found"));
+
+        if (!thread.getUser().getUsername().equals(username)) {
+            throw new IllegalArgumentException("You can only delete your own threads");
+        }
+
+        bookmarkRepository.deleteByThread(thread);
+        threadRepository.delete(thread);
+    }
+
+    @Transactional
+    public void deleteReply(Long replyId, String username) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new IllegalArgumentException("Reply not found"));
+
+        if (!reply.getUser().getUsername().equals(username)) {
+            throw new IllegalArgumentException("You can only delete your own replies");
+        }
+
+        // Find parent thread containing this reply
+        Thread thread = threadRepository.findByReplyId(replyId).orElse(null);
+        if (thread != null) {
+            thread.getReplyList().remove(reply);
+            threadRepository.save(thread);
+        } else {
+            // Check if it's a nested reply inside another reply
+            Reply parentReply = replyRepository.findAll().stream()
+                    .filter(r -> r.getReply_list().contains(reply))
+                    .findFirst()
+                    .orElse(null);
+            if (parentReply != null) {
+                parentReply.getReply_list().remove(reply);
+                replyRepository.save(parentReply);
+            }
+        }
+
+        replyRepository.delete(reply);
     }
 
     public Reply postReply(Long threadId, String username, String konten, String replyToUsername) {

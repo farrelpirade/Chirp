@@ -14,4 +14,5 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     List<Bookmark> findAllByUserOrderByThread_TanggalDesc(AkunUser user);
     Optional<Bookmark> findByUserAndThread(AkunUser user, Thread thread);
     void deleteByUserAndThread(AkunUser user, Thread thread);
+    void deleteByThread(Thread thread);
 }
