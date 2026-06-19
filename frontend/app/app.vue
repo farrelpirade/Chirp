@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { marked } from 'marked'
 
 const BACKEND_URL = 'http://localhost:8080/api'
@@ -205,6 +205,8 @@ const handleLogout = () => {
   localStorage.removeItem('chirp_user')
   likedPosts.value = []
   repostedPosts.value = []
+  conversations.value = []
+  activeConversation.value = null
 }
 
 const checkUserError = (err) => {
@@ -466,6 +468,175 @@ const handleUpdateProfile = async () => {
   }
 }
 
+// DM State
+const conversations = ref([])
+const activeConversation = ref(null)
+const newDmUsername = ref('')
+const newDmMessage = ref('')
+const dmError = ref('')
+
+const loadConversations = async () => {
+  if (!user.value) return
+  try {
+    conversations.value = await $fetch(`${BACKEND_URL}/dms`, {
+      query: { username: user.value.username }
+    })
+    if (activeConversation.value) {
+      const updated = conversations.value.find(c => c.id === activeConversation.value.id)
+      if (updated) {
+        activeConversation.value = updated
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load conversations:', err)
+  }
+}
+
+const selectConversation = (conv) => {
+  activeConversation.value = conv
+  newDmMessage.value = ''
+  dmError.value = ''
+}
+
+const handleStartNewConversation = async () => {
+  const target = newDmUsername.value.trim()
+  if (!target) return
+  dmError.value = ''
+  if (target === user.value.username) {
+    dmError.value = "You cannot start a conversation with yourself."
+    return
+  }
+  try {
+    const userRes = await $fetch(`${BACKEND_URL}/users/${target}`)
+    if (!userRes) {
+      dmError.value = `User @${target} does not exist.`
+      return
+    }
+    const res = await $fetch(`${BACKEND_URL}/dms`, {
+      method: 'POST',
+      body: {
+        username1: user.value.username,
+        username2: target
+      }
+    })
+    newDmUsername.value = ''
+    await loadConversations()
+    const conv = conversations.value.find(c => c.id === res.id)
+    if (conv) {
+      selectConversation(conv)
+    }
+  } catch (err) {
+    console.error('Failed to start conversation:', err)
+    dmError.value = err.data?.error || `User @${target} not found.`
+  }
+}
+
+const handleSendDm = async () => {
+  if (!activeConversation.value || !newDmMessage.value.trim()) return
+  const text = newDmMessage.value
+  newDmMessage.value = ''
+  try {
+    await $fetch(`${BACKEND_URL}/dms/${activeConversation.value.id}/messages`, {
+      method: 'POST',
+      body: {
+        senderUsername: user.value.username,
+        text: text
+      }
+    })
+    await loadConversations()
+  } catch (err) {
+    console.error('Failed to send message:', err)
+    dmError.value = err.data?.error || 'Failed to send message.'
+  }
+}
+
+const handlePinDmMessage = async (messageId) => {
+  if (!activeConversation.value) return
+  try {
+    await $fetch(`${BACKEND_URL}/dms/${activeConversation.value.id}/messages/${messageId}/pin`, {
+      method: 'POST'
+    })
+    await loadConversations()
+  } catch (err) {
+    console.error('Failed to pin message:', err)
+  }
+}
+
+const handleDeleteDmMessage = async (messageId) => {
+  if (!activeConversation.value) return
+  if (typeof window !== 'undefined' && !window.confirm("Are you sure you want to delete this message?")) return
+  try {
+    await $fetch(`${BACKEND_URL}/dms/${activeConversation.value.id}/messages/${messageId}`, {
+      method: 'DELETE'
+    })
+    await loadConversations()
+  } catch (err) {
+    console.error('Failed to delete message:', err)
+  }
+}
+
+const handleSortDmMessages = async () => {
+  if (!activeConversation.value) return
+  try {
+    await $fetch(`${BACKEND_URL}/dms/${activeConversation.value.id}/sort`, {
+      method: 'POST'
+    })
+    await loadConversations()
+  } catch (err) {
+    console.error('Failed to sort messages:', err)
+  }
+}
+
+const startDirectMessage = async (targetUsername) => {
+  if (!user.value) return
+  dmError.value = ''
+  try {
+    const res = await $fetch(`${BACKEND_URL}/dms`, {
+      method: 'POST',
+      body: {
+        username1: user.value.username,
+        username2: targetUsername
+      }
+    })
+    currentTab.value = 'dms'
+    await loadConversations()
+    const conv = conversations.value.find(c => c.id === res.id)
+    if (conv) {
+      selectConversation(conv)
+    }
+  } catch (err) {
+    console.error('Failed to start conversation from profile:', err)
+    currentTab.value = 'dms'
+    dmError.value = err.data?.error || 'Failed to start conversation.'
+  }
+}
+
+let dmInterval = null
+
+watch(currentTab, (newTab) => {
+  if (newTab === 'dms') {
+    loadConversations()
+    if (!dmInterval) {
+      dmInterval = setInterval(() => {
+        if (currentTab.value === 'dms') {
+          loadConversations()
+        }
+      }, 4000)
+    }
+  } else {
+    if (dmInterval) {
+      clearInterval(dmInterval)
+      dmInterval = null
+    }
+  }
+})
+
+onUnmounted(() => {
+  if (dmInterval) {
+    clearInterval(dmInterval)
+  }
+})
+
 const toggleReplies = (threadId) => {
   expandedThreadReplies.value[threadId] = !expandedThreadReplies.value[threadId]
 }
@@ -576,6 +747,10 @@ const formatTime = (timeStr) => {
             <button @click="currentTab = 'bookmarks'; loadBookmarks()" :class="['flex items-center gap-3 p-2 border-2 border-transparent text-left hover:border-black hover:bg-amber-50 transition-all', currentTab === 'bookmarks' ? 'bg-amber-200 border-black border-2 shadow-brutal-sm' : '']">
               <span class="border-2 border-black px-2 py-0.5 text-xs bg-white shadow-brutal-sm">B</span>
               Bookmarks
+            </button>
+            <button @click="currentTab = 'dms'; loadConversations()" :class="['flex items-center gap-3 p-2 border-2 border-transparent text-left hover:border-black hover:bg-amber-50 transition-all', currentTab === 'dms' ? 'bg-amber-200 border-black border-2 shadow-brutal-sm' : '']">
+              <span class="border-2 border-black px-2 py-0.5 text-xs bg-white shadow-brutal-sm">D</span>
+              Direct Messages
             </button>
             <button @click="currentTab = 'messages'; loadChatbotHistory()" :class="['flex items-center gap-3 p-2 border-2 border-transparent text-left hover:border-black hover:bg-amber-50 transition-all', currentTab === 'messages' ? 'bg-amber-200 border-black border-2 shadow-brutal-sm' : '']">
               <span class="border-2 border-black px-2 py-0.5 text-xs bg-white shadow-brutal-sm">M</span>
@@ -784,6 +959,122 @@ const formatTime = (timeStr) => {
           </div>
         </div>
 
+        <!-- DIRECT MESSAGES TAB -->
+        <div v-if="currentTab === 'dms'" class="flex flex-col h-screen">
+          <header class="border-b-4 border-black p-4 font-black text-xl flex justify-between items-center bg-white z-10 shrink-0">
+            <span>[ DIRECT MESSAGES ]</span>
+            <div v-if="activeConversation" class="flex gap-2">
+              <button @click="handleSortDmMessages" class="border-2 border-black bg-amber-300 px-3 py-1 text-xs font-black shadow-brutal-sm hover:translate-y-[1px] hover:translate-x-[1px] transition-all">
+                ⇅ SORT BY TIME
+              </button>
+            </div>
+          </header>
+
+          <div class="flex-grow flex min-h-0">
+            <!-- Left Panel: Conversation List -->
+            <div class="w-1/3 border-r-4 border-black flex flex-col h-full bg-amber-50/30">
+              <!-- Start Chat Input -->
+              <div class="p-4 border-b-4 border-black bg-white shrink-0">
+                <h4 class="font-black text-xs mb-2">[ START A NEW CHAT ]</h4>
+                <div class="flex gap-2">
+                  <input type="text" v-model="newDmUsername" placeholder="Enter username..." @keyup.enter="handleStartNewConversation" class="flex-grow border-2 border-black p-2 text-xs font-bold outline-none bg-amber-50 focus:bg-white" />
+                  <button @click="handleStartNewConversation" class="bg-amber-300 border-2 border-black px-3 text-xs font-black shadow-brutal-sm hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none transition-all">
+                    START
+                  </button>
+                </div>
+                <div v-if="dmError" class="text-red-500 font-bold text-[11px] mt-1.5 border border-red-500 bg-red-50 p-1">
+                  {{ dmError }}
+                </div>
+              </div>
+
+              <!-- Conversation Scroll Box -->
+              <div class="flex-grow overflow-y-auto p-4 flex flex-col gap-3">
+                <div v-if="conversations.length === 0" class="text-center font-bold text-gray-500 text-xs py-8">
+                  No active chats. Start one above!
+                </div>
+                <div v-for="conv in conversations" :key="conv.id" @click="selectConversation(conv)" :class="['border-2 border-black p-3 cursor-pointer shadow-brutal-sm transition-all text-left bg-white hover:bg-amber-100/50', activeConversation?.id === conv.id ? 'bg-amber-100 border-2 shadow-none translate-x-[2px] translate-y-[2px]' : '']">
+                  <div class="font-black text-sm text-black flex items-center justify-between">
+                    <span>@{{ conv.user1.username === user.username ? conv.user2.username : conv.user1.username }}</span>
+                  </div>
+                  <div class="text-[10px] text-gray-500 font-bold truncate mt-1">
+                    {{ conv.user1.username === user.username ? conv.user2.fullName : conv.user1.fullName }}
+                  </div>
+                  <!-- Latest message preview -->
+                  <div v-if="conv.messages && conv.messages.length > 0" class="text-xs text-gray-700 truncate mt-1.5 font-medium italic border-t border-black/10 pt-1">
+                    {{ conv.messages[conv.messages.length - 1].username === user.username ? 'You: ' : '' }}{{ conv.messages[conv.messages.length - 1].teks }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Panel: Chat Area -->
+            <div class="w-2/3 flex flex-col h-full bg-white">
+              <div v-if="!activeConversation" class="flex-grow flex items-center justify-center p-6 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] bg-amber-50/50">
+                <div class="border-4 border-black p-6 bg-white shadow-brutal max-w-sm text-center">
+                  <h3 class="font-black text-lg mb-2">[ CHAT PREVIEW ]</h3>
+                  <p class="font-bold text-sm text-gray-600">Select an active conversation from the sidebar or start a new one to begin messaging.</p>
+                </div>
+              </div>
+
+              <div v-else class="flex flex-col h-full">
+                <!-- Chat Header -->
+                <div class="p-3 border-b-2 border-black bg-amber-100 shrink-0 font-black text-sm flex items-center justify-between">
+                  <div>
+                    CHAT WITH <span class="text-amber-600">@{{ activeConversation.user1.username === user.username ? activeConversation.user2.username : activeConversation.user1.username }}</span>
+                    <span class="text-xs text-gray-500 font-bold ml-2">({{ activeConversation.user1.username === user.username ? activeConversation.user2.fullName : activeConversation.user1.fullName }})</span>
+                  </div>
+                  <button @click="activeConversation = null" class="border border-black bg-white px-2 py-0.5 text-xs font-bold hover:bg-gray-100">
+                    Close
+                  </button>
+                </div>
+
+                <!-- Chat Messages Scroll Area -->
+                <div class="flex-grow overflow-y-auto p-4 flex flex-col gap-4 bg-[linear-gradient(#f9f9f9_1px,transparent_1px),linear-gradient(90deg,#f9f9f9_1px,transparent_1px)] bg-[size:16px_16px] bg-amber-50/20">
+                  <div v-if="!activeConversation.messages || activeConversation.messages.length === 0" class="text-center font-bold text-gray-500 text-xs py-20 italic">
+                    No messages yet. Send a message to start the conversation!
+                  </div>
+
+                  <div v-for="msg in activeConversation.messages" :key="msg.id" :class="['border-2 border-black p-3.5 max-w-[80%] font-bold text-xs shadow-brutal-sm leading-relaxed relative group', msg.username === user.username ? 'bg-amber-200 self-end' : 'bg-white self-start']">
+                    <!-- Message Header -->
+                    <div class="flex justify-between items-center gap-4 mb-1 border-b border-black/10 pb-1 text-[9px] font-black text-gray-500">
+                      <span>{{ msg.username === user.username ? 'YOU' : '@' + msg.username }}</span>
+                      <span>{{ formatTime(msg.tanggalKirim) }}</span>
+                    </div>
+
+                    <!-- Message text -->
+                    <p class="font-medium text-sm text-gray-800 break-words pr-2 whitespace-pre-wrap">{{ msg.teks }}</p>
+
+                    <!-- Pin status badge -->
+                    <div v-if="msg.pinned" class="absolute -top-2.5 -right-2 bg-red-400 text-white text-[8px] font-black px-1.5 py-0.5 border border-black shadow-brutal-sm">
+                      📌 PINNED
+                    </div>
+
+                    <!-- Message Actions Overlay on Hover -->
+                    <div class="mt-2 flex gap-1 border-t border-black/10 pt-1.5 justify-end opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button @click="handlePinDmMessage(msg.id)" :class="['border border-black px-1.5 py-0.5 text-[8px] font-black shadow-brutal-sm hover:translate-y-[1px] hover:shadow-none transition-all', msg.pinned ? 'bg-red-200' : 'bg-white']">
+                        📌 {{ msg.pinned ? 'UNPIN' : 'PIN' }}
+                      </button>
+                      <button @click="handleDeleteDmMessage(msg.id)" class="border border-black bg-red-100 px-1.5 py-0.5 text-[8px] font-black shadow-brutal-sm hover:bg-red-400 hover:text-white hover:translate-y-[1px] hover:shadow-none transition-all">
+                        🗑️ DELETE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Chat Input Form -->
+                <div class="border-t-4 border-black p-3 bg-white shrink-0">
+                  <form @submit.prevent="handleSendDm" class="flex gap-2">
+                    <input type="text" v-model="newDmMessage" placeholder="Type a message..." required class="flex-grow border-2 border-black p-2.5 text-sm font-bold outline-none bg-amber-50 focus:bg-white focus:translate-y-[-1px] transition-all" />
+                    <button type="submit" class="bg-amber-300 border-2 border-black px-5 font-black text-sm shadow-brutal hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-brutal-sm transition-all">
+                      SEND
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- B. AI CHATBOT TAB -->
         <div v-if="currentTab === 'messages'" class="flex flex-col h-screen">
           <header class="border-b-4 border-black p-4 font-black text-xl flex justify-between items-center bg-white z-10 shrink-0">
@@ -842,9 +1133,12 @@ const formatTime = (timeStr) => {
                   <p class="text-sm font-bold text-gray-700">@{{ selectedProfileUser.username }}</p>
                 </div>
               </div>
-              <div class="mt-4 flex flex-wrap gap-4 text-xs font-bold">
+              <div class="mt-4 flex flex-wrap items-center gap-4 text-xs font-bold">
                 <span class="bg-white border border-black px-2 py-1 shadow-brutal-sm">📧 {{ selectedProfileUser.email }}</span>
                 <span v-if="selectedProfileUser.nomorTelpon" class="bg-white border border-black px-2 py-1 shadow-brutal-sm">📞 {{ selectedProfileUser.nomorTelpon }}</span>
+                <button v-if="selectedProfileUser?.username !== user?.username" @click="startDirectMessage(selectedProfileUser.username)" class="bg-amber-300 border-2 border-black px-3 py-1 shadow-brutal-sm hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none transition-all flex items-center gap-1.5 font-black">
+                  💬 MESSAGE
+                </button>
               </div>
             </div>
 

@@ -53,13 +53,13 @@ public class DirectMessage {
         }
     }
 
-    public void delateMessage(Long messageId) {
+    public void deleteMessage(Long messageId) {
         if (this.messages != null) {
             this.messages.removeIf(m -> m.getId().equals(messageId));
         }
     }
 
-    public void delateMessage() {}
+    public void deleteMessage() {}
 
     public void pinMessage() {}
 

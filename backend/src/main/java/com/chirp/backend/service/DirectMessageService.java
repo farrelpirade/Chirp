@@ -73,8 +73,13 @@ public class DirectMessageService {
         DirectMessage dm = dmRepository.findById(conversationId)
                 .orElseThrow(() -> new IllegalArgumentException("Conversation not found"));
 
-        dm.delateMessage(messageId);
+        dm.deleteMessage(messageId);
         return dmRepository.save(dm);
+    }
+
+    public DirectMessage getConversation(Long conversationId) {
+        return dmRepository.findById(conversationId)
+                .orElseThrow(() -> new IllegalArgumentException("Conversation not found"));
     }
 
     public DirectMessage sortMessages(Long conversationId) {

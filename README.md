@@ -37,7 +37,7 @@ Follow these simple steps to get Chirp up and running on your local machine:
 **1. Clone the Repo**
 
 ```bash
-git clone [https://github.com/farrelpirade/Chirp.git](https://github.com/farrelpirade/Chirp.git)
+git clone https://github.com/farrelpirade/Chirp.git
 cd Chirp
 ```
 

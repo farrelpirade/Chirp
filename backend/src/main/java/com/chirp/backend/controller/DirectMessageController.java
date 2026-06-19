@@ -85,6 +85,16 @@ public class DirectMessageController {
         }
     }
 
+    @GetMapping("/{conversationId}")
+    public ResponseEntity<?> getConversation(@PathVariable Long conversationId) {
+        try {
+            DirectMessage dm = dmService.getConversation(conversationId);
+            return ResponseEntity.ok(dm);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/{conversationId}/sort")
     public ResponseEntity<?> sortMessages(@PathVariable Long conversationId) {
         try {
